@@ -1,41 +1,58 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
-#define MAX 11
+// Creating a self referencial structure
 
-char arr[MAX];
-int top = -1;
+typedef struct {
+    int top;
+    unsigned capacity;
+    char* data;
+}Stack;
 
-int isEmpty(){
-    if (top == -1){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-    }
-
-int isFull(){
-    if (top == MAX-2){   // Last space to store null terminator
-        return 1;
-    }
-    else{
-        return 0;
-    }
+Stack* unsigned createStack(unsigned capacity)    {
+    Stack* stack = (Stack*)malloc(sizeof(Stack));
+    stack->capacity = capacity;
+    stack->top = -1;
+    stack-> array =(char*)malloc(stack->capacity * sizeof(char));
+    return stack;
 }
 
-void push(char data){
-    if(isFull()){
-        printf("Stack Overflow \n");
-        return;
-    }
-    arr[++top] = data;
+void push(Stack* stack, char item)    {
+    stack-> array[++stack->top] = item;
 }
 
-void pop(){
-    if(isEmpty()){
-        printf("Stack Underflow! \n");
+char pop(Stack* stack){
+    if (stack->top == -1) return '\0';
+    return stack->array[stack->top--];
+}
+
+bool isPalindrome(char* str) {
+    int length = strlen(str);
+    Stack* stack = createStack(length);
+    int mid = length / 2;
+    for (int i = 0; i < mid; i++) {
+        push(stack, str[i]);
     }
-    printf("Popped element! %d \n",arr[top]);
-    return arr[--top];
+    int startIndex = mid + (length % 2);
+    for (int i = startIndex; i < length; i++) {
+        if (str[i] != pop(stack)) {
+            free(stack->array);
+            free(stack);
+            return false;
+        }
+    }
+    free(stack->array);
+    free(stack);
+    return true;
+}
+int main() {
+    char str1[] = "racecar";
+    printf("'%s' is %s\n", str1, isPalindrome(str1) ? "a palindrome." : "not a palindrome.");
+
+    char str2[] = "jadedalgorithms";
+    printf("'%s' is %s\n", str2, isPalindrome(str2) ? "a palindrome." : "not a palindrome.");
+
+    return 0;
 }
