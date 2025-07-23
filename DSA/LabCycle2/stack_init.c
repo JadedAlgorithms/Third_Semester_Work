@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 100
+#define MAX 3
 
 int stack[MAX];
 int top =-1;
@@ -52,22 +52,32 @@ void display_array_stack() {
 }
 
 int main() {
-    printf("--- Array-based Stack Demo ---\n");
-    push(10);
-    push(20);
-    push(30);
-    display_array_stack(); // Output: Stack (Top to Bottom): 30 20 10 
+    // printf("--- Array-based Stack Demo ---\n");
+    // push(10);
+    // push(20);
+    // push(30);
+    // display_array_stack(); // Output: Stack (Top to Bottom): 30 20 10 
 
-    printf("Top element: %d\n", peek()); // Output: Top element: 30
+    // printf("Top element: %d\n", peek()); // Output: Top element: 30
 
-    pop(); // Output: Popped: 30
-    display_array_stack(); // Output: Stack (Top to Bottom): 20 10 
+    // pop(); // Output: Popped: 30
+    // display_array_stack(); // Output: Stack (Top to Bottom): 20 10 
 
-    pop(); // Output: Popped: 20
-    pop(); // Output: Popped: 10
-    pop(); // Output: Stack Underflow: Cannot pop from an empty stack. (and exits)
+    // pop(); // Output: Popped: 20
+    // pop(); // Output: Popped: 10
+    // pop(); // Output: Stack Underflow: Cannot pop from an empty stack. (and exits)
 
-    printf("Is stack empty? %s\n", is_empty() ? "Yes" : "No");
+    // printf("Is stack empty? %s\n", is_empty() ? "Yes" : "No");
 
-    return 0;
+    // return 0;
+
+push(10);
+push(20);
+display_array_stack();
+pop();
+display_array_stack();
+int i;
+for(i = 0;i<MAX; i++){
+    printf("%d ",stack[i]);
+}
 }
