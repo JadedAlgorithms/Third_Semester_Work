@@ -1,89 +1,53 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <limits.h>
 
-typedef struct {
-    int top;
-    unsigned capacity;
-    char* array;
-} Stack;
+#define MAX 100
 
-Stack* createStack(unsigned capacity) {
-    Stack* stack = (Stack*)malloc(sizeof(Stack));
-    stack->capacity = capacity;
-    stack->top = -1;
-    stack->array = (char*)malloc(stack->capacity * sizeof(char));
-    return stack;
+char stack[MAX];
+int top = -1;
+
+void push(char c) {
+    if (top < MAX - 1)
+        stack[++top] = c;
+    else
+        printf("Stack Overflow\n");
 }
 
-bool isEmpty(Stack* stack) {
-    return stack->top == -1;
+char pop() {
+    if (top >= 0)
+        return stack[top--];
+    else
+        return '\0';  // Stack underflow
 }
 
-void push(Stack* stack, char item) {
-    if (stack->top == stack->capacity - 1) return;
-    stack->array[++stack->top] = item;
+int isEmpty() {
+    return top == -1;
 }
 
-char pop(Stack* stack) {
-    if (isEmpty(stack)) return CHAR_MIN;
-    return stack->array[stack->top--];
-}
-
-char peek(Stack* stack) {
-    if (isEmpty(stack)) return CHAR_MIN;
-    return stack->array[stack->top];
-}
-
-bool isValid(char* s) {
-    int len = strlen(s);
-
-    if (len == 0) {
-        return true;
-    }
-
-    Stack* stack = createStack(len);
-
-    for (int i = 0; i < len; i++) {
-        char current_char = s[i];
-
-        if (current_char == '0') {
-            push(stack, current_char);
-        }
-        else if (current_char == '1') {
-            if (isEmpty(stack)) {
-                free(stack->array);
-                free(stack);
-                return false;
-            }
-
-            char top_char = peek(stack);
-            if (top_char == '0') {
-                pop(stack);
-            } else {
-                free(stack->array);
-                free(stack);
-                return false;
-            }
+int isAccepted(char *input) {
+    for (int i = 0; input[i] != '\0'; i++) {
+        if (isEmpty()||input[i]==stack[top]) {
+            push(input[i]);
+        } else if(input[i]!=stack[top]){
+            pop(); // Match a 1 with a 0
+        } else {
+            return 0; // Invalid character
         }
     }
 
-    bool result = isEmpty(stack);
-
-    free(stack->array);
-    free(stack);
-
-    return result;
+    return isEmpty(); // Accepted only if stack is empty
 }
 
 int main() {
-    printf("'01' is %s\n", isValid("01") ? "valid" : "invalid");
-    printf("'0011' is %s\n", isValid("0011") ? "valid" : "invalid");
-    printf("'0101' is %s\n", isValid("0101") ? "valid" : "invalid");
-    printf("'10' is %s\n", isValid("10") ? "valid" : "invalid");
-    printf("'001' is %s\n", isValid("001") ? "valid" : "invalid");
+    char input[100];
+    printf("Enter a binary string (only 0s and 1s): ");
+    scanf("%s", input);
+
+    if (isAccepted(input))
+        printf("The string is accepted by the PDA.\n");
+    else
+        printf("The string is NOT accepted by the PDA.\n");
 
     return 0;
 }
+
