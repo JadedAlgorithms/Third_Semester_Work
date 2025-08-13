@@ -36,6 +36,7 @@ char peek(Stack* stack) {
     return stack->array[stack->top];
 }
 bool isValid(char* s) {
+    int len = strlen(s);
 
     if (len == 0) {
         return true;

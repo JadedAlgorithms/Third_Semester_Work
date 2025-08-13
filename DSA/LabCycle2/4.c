@@ -11,21 +11,21 @@ typedef struct {
     char* data;
 }Stack;
 
-Stack* unsigned createStack(unsigned capacity)    {
+Stack* createStack(unsigned capacity)    {
     Stack* stack = (Stack*)malloc(sizeof(Stack));
     stack->capacity = capacity;
     stack->top = -1;
-    stack-> array =(char*)malloc(stack->capacity * sizeof(char));
+    stack->data = (char*)malloc(stack->capacity * sizeof(char));
     return stack;
 }
 
 void push(Stack* stack, char item)    {
-    stack-> array[++stack->top] = item;
+    stack->data[++stack->top] = item;
 }
 
 char pop(Stack* stack){
     if (stack->top == -1) return '\0';
-    return stack->array[stack->top--];
+    return stack->data[stack->top--];
 }
 
 bool isPalindrome(char* str) {
@@ -38,12 +38,12 @@ bool isPalindrome(char* str) {
     int startIndex = mid + (length % 2);
     for (int i = startIndex; i < length; i++) {
         if (str[i] != pop(stack)) {
-            free(stack->array);
+            free(stack->data);
             free(stack);
             return false;
         }
     }
-    free(stack->array);
+    free(stack->data);
     free(stack);
     return true;
 }
