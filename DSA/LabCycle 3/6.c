@@ -21,10 +21,10 @@ int main(){
     sparse[0].col = cols;
     sparse[0].value = 0;
     for(int i = 0; i<rows; i++){
-        for(int j = 0; i<cols;j++){
+        for(int j = 0; j<cols;j++){
             if (matrix[i][j]!= 0){
-                sparse[k].row = i;
-                sparse[k].col = j;
+                sparse[k].row = i+1;
+                sparse[k].col = j+1;
                 sparse[k].value = matrix[i][j];
                 k++;
             }

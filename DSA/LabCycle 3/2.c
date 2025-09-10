@@ -1,35 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
-typedef struct Node{
-    int coef;
+typedef struct Node {
+    double coef;
     int pow;
-    Node* next;
+    struct Node* next;
+} Node;
 
-}Node;
-
-Node* createNode(int coef,int pow){
-    Node* newNode =(Node*)malloc(sizeof(Node));
-    newNode -> coef = coef;
-    newNode -> pow = pow;
-    newNode -> next  = NULL;
+Node* createNode(double coef, int pow) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->coef = coef;
+    newNode->pow = pow;
+    newNode->next = NULL;
     return newNode;
 }
 
-void addTerm(Node** head,int coef,int pow){
-    Node* newNode = createNode(coef,pow);
-    if(*head == NULL){
+void addTerm(Node** head, double coef, int pow) {
+    Node* newNode = createNode(coef, pow);
+    if (*head == NULL) {
         *head = newNode;
+        return;
     }
     Node* temp = *head;
-    while(temp -> next != NULL){
-        temp = temp -> next;
+    while (temp->next != NULL) {
+        temp = temp->next;
     }
-    temp -> next = newNode;
+    temp->next = newNode;
 }
 
+void displayPolynomial(Node* head) {
+    Node* temp = head;
+    while (temp != NULL) {
+        if (temp->coef < 0) {
+            printf(" - %.2lf", fabs(temp->coef));
+        } else {
+            if (temp != head) printf(" + ");
+            printf("%.2lf", temp->coef);
+        }
+        if (temp->pow != 0) {
+            printf("x");
+            if (temp->pow != 1) printf("^%d", temp->pow);
+        }
+        temp = temp->next;
+    }
+    printf("\n");
+}
 
-double evaluatePolynomial(struct Term* head, double x) {
+double evaluatePolynomial(Node* head, double x) {
     double result = 0;
     Node* temp = head;
     while (temp != NULL) {
@@ -51,7 +69,7 @@ int main() {
     for (int i = degree; i >= 0; i--) {
         printf("Coefficient for x^%d: ", i);
         scanf("%lf", &coef);
-        appendTerm(&poly, coef, i);
+        addTerm(&poly, coef, i);
     }
     
     printf("The polynomial is: ");

@@ -3,110 +3,95 @@
 #include <stdbool.h>
 
 #define MAX 10
+
 int front = -1, rear = -1;
-int queue[MAX];
+int deque[MAX];
 
-bool isEmpty(){
-    if(front == rear == -1){
-        return true;
-    }
-    else{
-        return false;
-    }
+bool isEmpty(void) {
+    return front == -1;
 }
 
-bool isFull(){
-    if((rear+1%MAX) == front){
-        return true;
-    }
-    else{
-        return false;
-    }
-
+bool isFull(void) {
+    return ((rear + 1) % MAX) == front;
 }
 
-void insertfront(int data){
-    if(isFull()){
-        printf("Error! Queue is full,\n ");
+void insertfront(int data) {
+    if (isFull()) {
+        printf("Error! Deque is full.\n");
+        return;
     }
-    if(isEmpty){
+    if (isEmpty()) {
         front = rear = 0;
+    } else {
+        front = (front - 1 + MAX) % MAX;
     }
-    else{
-        front = (front-1+MAX)%MAX;
-    }
-    if(front = 0 ){
-        front = MAX-1;
-    }
-    else{
-        front = front -1;
-    }
-    queue[front] = data;
-    printf("Item has been inserted \n");
+    deque[front] = data;
+    printf("Item inserted at front.\n");
 }
 
-void insertrear(int data){
-    if(isFull()){
-        printf("Error! Queue is full,\n ");
+void insertrear(int data) {
+    if (isFull()) {
+        printf("Error! Deque is full.\n");
+        return;
     }
-    if(isEmpty){
+    if (isEmpty()) {
         front = rear = 0;
+    } else {
+        rear = (rear + 1) % MAX;
     }
-    else{
-        rear = (rear+1)%MAX;
-    }
-    queue[rear] = data;
-    printf("Item inserted \n");
+    deque[rear] = data;
+    printf("Item inserted at rear.\n");
 }
 
-int deletefront(){
-    if(isEmpty()){
-        printf("Queue is empty! \n");
+int deletefront(void) {
+    if (isEmpty()) {
+        printf("Deque is empty!\n");
         return -1;
     }
-    printf("Deleted element from Queue %d \n",queue[front]);
+    int data = deque[front];
     if (front == rear) {
-        front = rear = -1; // Only one element was present
+        front = rear = -1;
     } else {
         front = (front + 1) % MAX;
     }
+    printf("Deleted element from front: %d\n", data);
+    return data;
 }
 
-void deleterear() {
+int deleterear(void) {
     if (isEmpty()) {
-        printf("Deque Underflow! Cannot delete from rear.\n");
+        printf("Deque is empty!\n");
+        return -1;
+    }
+    int data = deque[rear];
+    if (front == rear) {
+        front = rear = -1;
+    } else {
+        rear = (rear - 1 + MAX) % MAX;
+    }
+    printf("Deleted element from rear: %d\n", data);
+    return data;
+}
+
+void display(void) {
+    if (isEmpty()) {
+        printf("Deque is empty!\n");
         return;
     }
-    printf("Deleted element from rear: %d\n", queue[rear]);
-    if (front == rear) {
-        front = rear = -1; 
-    } else {    
-        if (rear==0)
-            rear=MAX-1;
-        else
-            rear=rear-1;
-    }
-}
-
-void display(){
-    int i;
-    if(isEmpty()){
-        printf("Queue is empty! \n");
-    }
-    i = front;
-    printf("Queue elements! \n");
-    while(1){
-        printf("%d ",queue[i]);
-        if(i == rear){
-            break;}
-        i = (i+1)%MAX;
-        
+    printf("Deque elements: ");
+    int i = front;
+    while (true) {
+        printf("%d ", deque[i]);
+        if (i == rear) break;
+        i = (i + 1) % MAX;
     }
     printf("\n");
 }
-int main() {
+
+int main(void) {
     int choice, item;
-    while (1) {
+
+    for (;;) {
         printf("\n***** MENU *****\n");
         printf("1. Insert Front\n");
         printf("2. Insert Rear\n");
@@ -115,18 +100,22 @@ int main() {
         printf("5. Display\n");
         printf("6. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d", &choice);
-        
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Exiting.\n");
+            break;
+        }
+
         switch (choice) {
             case 1:
                 printf("Enter the element to insert at front: ");
-                scanf("%d", &item);
-                insertfront(item);
+                if (scanf("%d", &item) == 1) insertfront(item);
+                else { printf("Invalid input.\n"); exit(1); }
                 break;
             case 2:
                 printf("Enter the element to insert at rear: ");
-                scanf("%d", &item);
-                insertrear(item);
+                if (scanf("%d", &item) == 1) insertrear(item);
+                else { printf("Invalid input.\n"); exit(1); }
                 break;
             case 3:
                 deletefront();
@@ -139,7 +128,7 @@ int main() {
                 break;
             case 6:
                 printf("Exiting program.\n");
-                exit(0);
+                return 0;
             default:
                 printf("Invalid choice! Please try again.\n");
         }

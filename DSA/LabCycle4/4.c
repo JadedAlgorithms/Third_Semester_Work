@@ -46,10 +46,10 @@ int isEmpty(Node** head) {
 }
 
 int main() {
-    Node* head = newNode(4, 2);
+    Node* head = newNode(4, 4);
     push(&head, 5, 1);
     push(&head, 11, 3);
-    push(&head, 1, 0);
+    push(&head, 1, 2);
 
     while (!isEmpty(&head)) {
         printf("%d ", peek(&head));
