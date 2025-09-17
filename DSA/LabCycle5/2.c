@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct Node{
+typedef struct Node Node;
+
+struct Node{
     int data;
     Node* next;
-}Node;
+};
 
 Node* createNode(int value){
     Node* newNode = (Node*)malloc(sizeof(Node));
@@ -19,7 +21,7 @@ void addAfter(Node** head,int targetData,int value){
     while(temp != NULL && temp -> data != targetData){
         temp = temp -> next;
     }
-    if (*head == NULL){
+    if (temp == NULL){
         printf("Target not found, ERROR 404\n");
         return;
     }
@@ -51,10 +53,10 @@ int main(){
     displayList(head);
     int target,value;
     printf("Enter the node data after which node to enter: ");
-    scanf("%d ",&target);
+    scanf("%d",&target);
     printf("Enter the data for insertion: ");
     scanf("%d",&value);
-    addAfter(head,target,value);
+    addAfter(&head,target,value);
     displayList(head);
     return 0;
 

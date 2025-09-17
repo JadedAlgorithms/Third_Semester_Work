@@ -27,21 +27,66 @@ int exists(struct Node* head, int data) {
     return 0;
 }
 
-struct Node* Union(struct Node* s1, struct Node* s2) {
+struct Node* set_intersection(struct Node* s1, struct Node* s2) {
     struct Node* result = NULL;
     struct Node* t = s1;
     while (t) {
-        if (!exists(result, t->data)) insert(&result, t->data);
-        t = t->next;
-    }
-    t = s2;
-    while (t) {
-        if (!exists(result, t->data)) insert(&result, t->data);
+        if (exists(s2, t->data)) {
+            insert(&result, t->data);
+        }
         t = t->next;
     }
     return result;
 }
 
-struct Node* Intersection(struct Node* s1, struct Node* s2) {
+struct Node* set_union(struct Node* s1, struct Node* s2) {
     struct Node* result = NULL;
     struct Node* t = s1;
+    while (t) {
+        if (!exists(result, t->data)) {
+            insert(&result, t->data);
+        }
+        t = t->next;
+    }
+    t = s2;
+    while (t) {
+        if (!exists(result, t->data)) {
+            insert(&result, t->data);
+        }
+        t = t->next;
+    }
+    return result;
+}
+
+int main() {
+    struct Node* set1 = NULL;
+    insert(&set1, 1);
+    insert(&set1, 2);
+    insert(&set1, 3);
+
+    struct Node* set2 = NULL;
+    insert(&set2, 2);
+    insert(&set2, 3);
+    insert(&set2, 4);
+
+    struct Node* unionSet = set_union(set1, set2);
+    struct Node* intersectionSet = set_intersection(set1, set2);
+
+    printf("Union: ");
+    struct Node* temp = unionSet;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+
+    printf("Intersection: ");
+    temp = intersectionSet;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+
+    return 0;
+}

@@ -4,7 +4,7 @@
 
 typedef struct Node{
     int data;
-    Node* next;
+    struct Node* next;
 }Node;
 
 Node* createNode(int value){
@@ -14,6 +14,8 @@ Node* createNode(int value){
     return newNode;
 }
 
+void addAtEnd(Node** headRef, int value); // Function prototype
+
 void insertAtPosition(Node** headRef , int position , int value){
     if (position < 1){
         printf("Invalid position! \n");
@@ -22,27 +24,28 @@ void insertAtPosition(Node** headRef , int position , int value){
 
     Node* newNode = createNode(value);
     if (position == 1){
-        newNode -> data = headRef;
+        newNode -> next = *headRef;
+        newNode -> data = value;
         *headRef = newNode;
-        printf("Inserted %d at position \n",value);
+        printf("Inserted %d at position 1\n",value);
         return;
     }
 
-    Node* temp = headRef;
+    Node* temp = *headRef; // FIXED: use *headRef
     int currentPos = 1;
 
-    while(temp != NULL && currentPos < position){
+    while(temp != NULL && currentPos < position - 1){ // position-1 for correct insertion
         temp = temp -> next;
         currentPos++;        
     }
     if(temp == NULL){
-        printf("Position %d is out of bounds");
+        printf("Position %d is out of bounds\n", position); // FIXED: add position
         free(newNode);
         return;
     }
     newNode -> next = temp -> next;
     temp -> next = newNode;
-    printf("inserted %d at position %d\n",value,currentPos);
+    printf("Inserted %d at position %d\n",value,position);
 }
 
 
@@ -66,10 +69,22 @@ int main(){
     scanf("%d",&n);
     for(int i = 0; i<n ;i++){
         printf("Enter element: ");
-        scanf("%d ",&data);
+        scanf("%d",&data);
         addAtEnd(&head,data);
         printf("\n");
     }
     printf("The display list is:    ");
     displayList(head);
+}
+void addAtEnd(Node** headRef, int value) {
+    Node* newNode = createNode(value);
+    if (*headRef == NULL) {
+        *headRef = newNode;
+        return;
+    }
+    Node* temp = *headRef;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
 }
